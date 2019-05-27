@@ -14,7 +14,7 @@ void playerInit(int playerCount) {
             estate(i);
         }
         woodcutter(i);
-        // p->shuffleDeck();
+        p->shuffleDeck();
         p->draw(5);
     }
 }

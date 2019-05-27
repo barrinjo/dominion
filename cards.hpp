@@ -4,12 +4,14 @@
 #include "global.hpp"
 
 void copper(int loc) {
-    card *c = new card("Copper", TREASURE, 0, 1, 0);
+    player *p = playerList[loc];
+    card *c = new card("Copper", p, TREASURE, 0, 1, 0);
     playerList[loc]->addCard(c);
 }
 
 void estate(int loc) {
-    card *c = new card("Estate", VICTORY, 2, 0, 1);
+    player *p = playerList[loc];
+    card *c = new card("Estate", p, VICTORY, 2, 0, 1);
     playerList[loc]->addCard(c);
 }
 
@@ -18,13 +20,13 @@ void test() {
 }
 
 void woodcutter(int loc) {
-    card *c = new card("Woodcutter", ACTION, 3, 0, 0);
-    void (*f)() = test;
-    c->addAction(f);
-    c->doAction();
-    // void (*fcnPtr)() = test;
-    // (*fcnPtr)();
-    playerList[loc]->addCard(c);
+    player *p = playerList[loc];
+    card *c = new card("Woodcutter", p, ACTION, 3, 0, 0);
+    void (*f)(int x, player *p) = addGold;
+    c->addAction(f, 2);
+    f = addBuys;
+    c->addAction(f, 1);
+    p->addCard(c);
 }
 
 #endif

@@ -3,18 +3,10 @@
 
 #include "global.hpp"
 
-void playHand(player *p);
 void cleanPhase();
 void actionPhase();
 void buyPhase();
 bool handCheck(std::vector<card *> deck, type t);
-
-void actionPhase() {
-    std::cout << "action phase: " << std::endl;
-    player *p = playerList[turn];
-    p->printHand();
-    playHand(p);
-}
 
 bool handCheck(std::vector<card *> deck, type t) {
     for(unsigned int i = 0; i < deck.size(); i++) {
@@ -24,16 +16,20 @@ bool handCheck(std::vector<card *> deck, type t) {
     return false;
 }
 
-void playHand(player *p) {
+void actionPhase() {
+    std::cout << "action phase: " << std::endl;
+    player *p = playerList[turn];
+    std::vector<card *> hand = p->getHand();
+    bool exit = !handCheck(hand, ACTION);
     std::string input;
-    bool exit = !handCheck(p->getDeck(), ACTION);
     while(!exit) {
-        std::cout << "play a card or end turn with \"end\"";
+        p->printHand();
+        std::cout << "play an action card" << std::endl;
         std::cin >> input;
-        // if(input == "end")
-        //     exit = true;
-        // else
-            
+        if(input == "quit")
+            exit = true;
+        else
+            p->playCard(std::stoi(input));
     }
 }
 

@@ -8,24 +8,36 @@
 enum type {TREASURE, VICTORY, ACTION};
 int turn;
 
+class player;
+
 class card {
 public:
     std::string title;
 private:
+    player *p;
     type t;
     int cost;
     int value;
     int points;
-    void (*action)();
+    int it;
+    std::vector< void (*)(int, player *) > actionList;
+    std::vector< int > actionListValues;
 public:
-    card(std::string title, type t, int cost, int value, int points):
-    title(title), t(t), cost(cost), value(value), points(points), action(NULL) {}
+    card(std::string title, player *p, type t, int cost, int value, int points):
+    title(title), p(p), t(t), cost(cost), value(value), points(points), it(0) {}
     // std::string getTitle() { return title; }
-    void addAction(void (*f)()) { action = f; }
-    void doAction() { (*action)(); }
+    void addAction(void (*f)(int, player *), int value) {
+        actionList.push_back(f);
+        actionListValues.push_back(value);
+    }
+    void doAction() {
+        actionList[it](actionListValues[it], p);
+        it++;
+    }
     int getCost() { return cost; }
     type getType() { return t; }
     int getValue() { return value; }
+    std::vector< void (*)(int, player *) > getActionList() { return actionList; }
 };
 
 int myrandom (int i) { return std::rand()%i;}
@@ -52,8 +64,6 @@ public:
         srand(time(NULL));
         std::random_shuffle(discard.begin(), discard.end(), myrandom);
     }
-    // void shuffleDeck() { shuffle(deck); }
-    // void shuffleDiscard() { shuffle(discard); }
     void draw(unsigned int count) {
         if(deck.size() < count) {
             shuffleDiscard();
@@ -74,6 +84,16 @@ public:
         for(unsigned int i = 0; i < hand.size(); i++) {
             // std::string temp = hand[i]->getTitle;
             std::cout << "card " << i << ": " << hand[i]->title << std::endl;
+        }
+    }
+    void playCard(int loc) {
+        card *c = hand[loc];
+        if(c->getType() == ACTION) {
+            for(unsigned int i = 0; i < c->getActionList().size(); i++) {
+                c->doAction();
+            }
+            board.push_back(c);
+            hand.erase(hand.begin() + loc);
         }
     }
     void clearBoard() {

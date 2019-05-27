@@ -3,6 +3,7 @@
 #include <string>
 
 #include "global.hpp"
+#include "actions.hpp"
 #include "phase.hpp"
 #include "cards.hpp"
 #include "players.hpp"
