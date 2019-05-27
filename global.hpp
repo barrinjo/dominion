@@ -54,7 +54,8 @@ public:
     void draw(unsigned int count) {
         if(deck.size() < count) {
             shuffleDiscard();
-            for(unsigned int i = 0; i < discard.size(); i++) {
+            unsigned int s = discard.size();
+            for(unsigned int i = 0; i < s; i++) {
                 card *c = discard[discard.size() - 1];
                 discard.pop_back();
                 deck.insert(deck.begin(), c); 

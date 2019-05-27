@@ -13,7 +13,7 @@ void playerInit(int playerCount) {
         for(int j = 0; j < 3; j++) {
             estate(i);
         }
-        p->shuffleDeck();
+        // p->shuffleDeck();
         p->draw(5);
     }
 }
