@@ -16,10 +16,13 @@ private:
     int cost;
     int value;
     int points;
+    void (*action)();
 public:
     card(std::string title, type t, int cost, int value, int points):
-    title(title), t(t), cost(cost), value(value), points(points) {}
+    title(title), t(t), cost(cost), value(value), points(points), action(NULL) {}
     // std::string getTitle() { return title; }
+    void addAction(void (*f)()) { action = f; }
+    void doAction() { (*action)(); }
     int getCost() { return cost; }
     type getType() { return t; }
     int getValue() { return value; }
