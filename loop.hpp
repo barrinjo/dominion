@@ -3,18 +3,24 @@
 
 #include "global.hpp"
 
-void gameLoop();
+void gameLoop(int playerCount);
 
 void start(int playerCount) {
     turn = 0;
     playerInit(playerCount);
-    gameLoop();
+    gameLoop(playerCount);
 }
 
-void gameLoop() {
-    actionPhase();
-    // buyPhase();
-    // cleanPhase();
+void gameLoop(int playerCount) {
+    bool exit = false;
+    while(!exit) {
+        actionPhase();
+        buyPhase();
+        cleanPhase();
+        turn++;
+        if(turn >= playerCount)
+            turn = 0;
+    }
 }
 
 #endif
