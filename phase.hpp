@@ -38,11 +38,13 @@ void actionPhase() {
         std::getline(std::cin, input);
         if(isInteger(input)) {
             p->playCard(std::stoi(input));
-            exit = !handCheck(hand, ACTION);
-        } else if (input == "end") {
-            exit = true;
+            hand = p->getHand();
+            // exit = !handCheck(hand, ACTION);
         } else {
-            std::cout << "input not recognized" << std::endl;
+            exit = true;
+        }
+        if(p->getActions() == 0 || !handCheck(hand, ACTION)) {
+            break;
         }
     }
 }
@@ -62,10 +64,8 @@ void buyPhase() {
         std::getline(std::cin, input);
         if(isInteger(input)) {
             kingdom[std::stoi(input)]->buyCard(p);
-        } else if (input == "end") {
-            p->setBuys(0);
         } else {
-            std::cout << "input not recognized" << std::endl;
+            break;
         }
     }
 }

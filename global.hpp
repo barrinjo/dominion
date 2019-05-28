@@ -37,6 +37,7 @@ public:
         actionList[it](actionListValues[it], p);
         it++;
     }
+    void resetCard() { it = 0; }
     int getCost() { return cost; }
     type getType() { return t; }
     int getValue() { return value; }
@@ -107,6 +108,7 @@ public:
         for(unsigned int i = 0; i < board.size(); i++) {
             card *c = board[board.size() - 1];
             board.pop_back();
+            c->resetCard();
             discard.push_back(c);
         }
     }
@@ -141,6 +143,7 @@ class kingdomCard {
     card * (*cardCon)(player *);
     int remaining;
 public:
+    kingdomCard(card * (*c)(player *), int r): cardCon(c), remaining(r) {}
     kingdomCard(card * (*c)(player *)): cardCon(c), remaining(10) {}
     void buyCard(player *p) {
         card *c = cardCon(p);
