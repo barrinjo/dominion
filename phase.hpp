@@ -27,38 +27,46 @@ inline bool isInteger(const std::string & s)
 }
 
 void actionPhase() {
-    std::cout << "action phase: " << std::endl;
+    std::cout << "\033[2J\033[1;1H" << "  ACTION PHASE: " << std::endl;
     player *p = playerList[turn];
     std::vector<card *> hand = p->getHand();
     bool exit = !handCheck(hand, ACTION);
     std::string input;
-    p->printHand();
     while(!exit) {
-        std::cout << "play an action card" << std::endl;
-        std::cin >> input;
+        p->printHand();
+        std::cout << "You have " << p->getActions() << " actions" << std::endl;
+        std::getline(std::cin, input);
         if(isInteger(input)) {
             p->playCard(std::stoi(input));
-            p->printHand();
+            exit = !handCheck(hand, ACTION);
         } else if (input == "end") {
             exit = true;
         } else {
             std::cout << "input not recognized" << std::endl;
         }
-        exit = handCheck(hand, ACTION);
     }
 }
 
 void buyPhase() {
-    std::cout << "buy phase: " << std::endl;
+    std::cout << "  BUY PHASE: " << std::endl;
     player *p = playerList[turn];
+    p->printHand();
     std::vector<card *> hand = p->getHand();
-    bool exit = !handCheck(hand, TREASURE);
     for(unsigned int i = 0; i < hand.size(); i++) {
         p->updateGold(hand[i]->getValue());
     }
-    while(!exit) {
+    while(p->getBuys() > 0 && p->getGold() > 0) {
         std::cout << "you have " << p->getGold() << " gold and " << p->getBuys() << " buys" << std::endl;
-        exit = true;
+        printKingdom();
+        std::string input;
+        std::getline(std::cin, input);
+        if(isInteger(input)) {
+            kingdom[std::stoi(input)]->buyCard(p);
+        } else if (input == "end") {
+            p->setBuys(0);
+        } else {
+            std::cout << "input not recognized" << std::endl;
+        }
     }
 }
 
@@ -70,8 +78,8 @@ void cleanPhase() {
     p->setActions(1);
     p->setBuys(1);
     std::string temp;
-    std::cout << "Enter \'0\' to Continue" << std::endl;
-    std::cin >> temp;
+    std::cout << "Enter to Continue" << std::endl;
+    std::getline(std::cin, temp);
 }
 
 #endif

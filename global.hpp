@@ -3,10 +3,13 @@
 
 #include <vector>
 #include <time.h>
-#include <algorithm> 
+#include <algorithm>
 
 enum type {TREASURE, VICTORY, ACTION};
-int turn;
+int turn = 0;
+class kingdomCard;
+class card;
+std::vector< kingdomCard * > kingdom;
 
 class player;
 
@@ -53,8 +56,11 @@ class player {
     std::vector <card *> board;
 public:
     player(int loc): loc(loc), actions(1), gold(0), buys(1) {}
-    void addCard(card *c) {
+    void addCardDeck(card *c) {
         deck.push_back(c);
+    }
+    void addCardDiscard(card *c) {
+        discard.push_back(c);
     }
     void shuffleDeck(/*std::vector<card *> v*/) {
         srand(time(NULL));
@@ -88,12 +94,13 @@ public:
     }
     void playCard(int loc) {
         card *c = hand[loc];
-        if(c->getType() == ACTION) {
+        if(c->getType() == ACTION && actions > 0) {
             for(unsigned int i = 0; i < c->getActionList().size(); i++) {
                 c->doAction();
             }
             board.push_back(c);
             hand.erase(hand.begin() + loc);
+            actions--;
         }
     }
     void clearBoard() {
@@ -129,5 +136,29 @@ public:
 };
 
 std::vector <player *> playerList;
+
+class kingdomCard {
+    card * (*cardCon)(player *);
+    int remaining;
+public:
+    kingdomCard(card * (*c)(player *)): cardCon(c), remaining(10) {}
+    void buyCard(player *p) {
+        card *c = cardCon(p);
+        if(c->getCost() <= p->getGold()) {
+            if(remaining > 0) {
+                p->addCardDiscard(c);
+                p->updateGold(-c->getCost());
+                p->updateBuys(-1);
+                remaining--;
+            } else {
+                std::cout << "none remaining" << std::endl;
+            }
+        } else {
+            std::cout << "not enough money" << std::endl;
+        }
+    }
+    card *getCard() { return cardCon(playerList[turn]); }
+    int getRemaining() { return remaining; }
+};
 
 #endif

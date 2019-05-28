@@ -7,6 +7,7 @@ void gameLoop(int playerCount);
 
 void start(int playerCount) {
     turn = 0;
+    kingdomInit();
     playerInit(playerCount);
     gameLoop(playerCount);
 }
@@ -17,9 +18,9 @@ void gameLoop(int playerCount) {
         actionPhase();
         buyPhase();
         cleanPhase();
-        turn++;
-        if(turn >= playerCount)
-            turn = 0;
+        // turn++;
+        // if(turn >= playerCount)
+        //     turn = 0;
     }
 }
 

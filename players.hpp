@@ -8,12 +8,11 @@ void playerInit(int playerCount) {
         player *p = new player(i);
         playerList.push_back(p);
         for(int j = 0; j < 7; j++) {
-            copper(i);
+            p->addCardDeck(copper(p));
         }
         for(int j = 0; j < 3; j++) {
-            estate(i);
+            p->addCardDeck(estate(p));
         }
-        woodcutter(i);
         p->shuffleDeck();
         p->draw(5);
     }
