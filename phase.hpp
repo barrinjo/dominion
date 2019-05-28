@@ -28,6 +28,7 @@ inline bool isInteger(const std::string & s)
 
 void actionPhase() {
     std::cout << "\033[2J\033[1;1H" << "  ACTION PHASE: " << std::endl;
+    std::cout << "  PLAYER " << turn << std::endl;
     player *p = playerList[turn];
     std::vector<card *> hand = p->getHand();
     bool exit = !handCheck(hand, ACTION);
@@ -72,7 +73,8 @@ void buyPhase() {
 
 void cleanPhase() {
     player *p = playerList[turn];
-    p->clearAll();
+    p->clearBoard();
+    p->clearHand();
     p->draw(5);
     p->setGold(0);
     p->setActions(1);

@@ -3,6 +3,36 @@
 
 #include "global.hpp"
 
+void endGame() {
+    std::cout << "GAME END: " << std::endl;
+    for(unsigned int playerLoc = 0; playerLoc < playerList.size(); playerLoc++) {
+        player *p = playerList[playerLoc];
+        p->clearAll();
+        std::vector<card *> v = p->getDiscard();
+        for(unsigned int i = 0; i < v.size(); i++) {
+            if(v[i]->getType() == VICTORY) {
+                p->updatePoints(v[i]->getPoints());
+            }
+        }
+    }
+    for(unsigned int playerLoc = 0; playerLoc < playerList.size(); playerLoc++) {
+        std::cout << "player " << playerLoc << ": " << playerList[playerLoc]->getPoints() << " points" << std::endl;
+    }
+}
+
+bool checkForGameEnd() {
+    int endCount = 0;
+    for(unsigned int i = 0; i < kingdom.size(); i++) {
+        if(kingdom[i]->getRemaining() == 0)
+            endCount++;
+    }
+    if(kingdom[5]->getRemaining() == 0 || endCount == 3) {
+        endGame();
+        return true;
+    }
+    return false;
+}
+
 void printKingdom() {
     std::cout << "  CARD SHOP:" << std::endl;
     for(unsigned int i = 0; i < kingdom.size(); i++) {
@@ -25,15 +55,15 @@ void kingdomInit() {
     f = gold;
     kingdom.push_back(new kingdomCard(f, 30));
     f = estate;
-    kingdom.push_back(new kingdomCard(f, 24));
+    kingdom.push_back(new kingdomCard(f, 1));
     f = duchy;
     kingdom.push_back(new kingdomCard(f, 12));
     f = province;
     kingdom.push_back(new kingdomCard(f, 12));
     f = woodcutter;
-    kingdom.push_back(new kingdomCard(f));
+    kingdom.push_back(new kingdomCard(f, 1));
     f = village;
-    kingdom.push_back(new kingdomCard(f));
+    kingdom.push_back(new kingdomCard(f, 1));
     f = smithy;
     kingdom.push_back(new kingdomCard(f));
     f = festival;

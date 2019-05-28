@@ -41,6 +41,7 @@ public:
     int getCost() { return cost; }
     type getType() { return t; }
     int getValue() { return value; }
+    int getPoints () { return points; }
     std::vector< void (*)(int, player *) > getActionList() { return actionList; }
 };
 
@@ -51,12 +52,13 @@ class player {
     int actions;
     int gold;
     int buys;
+    int points;
     std::vector <card *> deck;
     std::vector <card *> discard;
     std::vector <card *> hand;
     std::vector <card *> board;
 public:
-    player(int loc): loc(loc), actions(1), gold(0), buys(1) {}
+    player(int loc): loc(loc), actions(1), gold(0), buys(1), points(0) {}
     void addCardDeck(card *c) {
         deck.push_back(c);
     }
@@ -120,11 +122,20 @@ public:
             discard.push_back(c);
         }
     }
-    void clearAll() { clearBoard(); clearHand(); }
+    void clearDeck() {
+        for(unsigned int i = 0; i < deck.size(); i++) {
+            card *c = deck[deck.size() - 1];
+            deck.pop_back();
+            c->resetCard();
+            discard.push_back(c);
+        }
+    }
+    void clearAll() { clearBoard(); clearHand(); clearDeck(); }
 
     void updateGold(int change) { gold += change; }
     void updateActions(int change) { actions += change; }
     void updateBuys(int change) { buys += change; }
+    void updatePoints(int change) { points += change; }
 
     void setGold(int i) { gold = i; }
     void setActions(int i) { actions = i; }
@@ -133,7 +144,9 @@ public:
     int getGold() { return gold; }
     int getActions() { return actions; }
     int getBuys() { return buys; }
+    int getPoints() { return points; }
     std::vector<card *> getDeck() { return deck; }
+    std::vector<card *> getDiscard() { return discard; }
     std::vector<card *> getHand() { return hand; }
 };
 

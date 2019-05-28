@@ -11,6 +11,6 @@
 #include "loop.hpp"
 
 int main() {
-    start(1);
+    start(3);
     return 0;
 }

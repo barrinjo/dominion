@@ -18,9 +18,10 @@ void gameLoop(int playerCount) {
         actionPhase();
         buyPhase();
         cleanPhase();
-        // turn++;
-        // if(turn >= playerCount)
-        //     turn = 0;
+        exit = checkForGameEnd();
+        turn++;
+        if(turn >= playerCount)
+            turn = 0;
     }
 }
 
