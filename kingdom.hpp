@@ -55,15 +55,15 @@ void kingdomInit() {
     f = gold;
     kingdom.push_back(new kingdomCard(f, 30));
     f = estate;
-    kingdom.push_back(new kingdomCard(f, 1));
+    kingdom.push_back(new kingdomCard(f, 24));
     f = duchy;
     kingdom.push_back(new kingdomCard(f, 12));
     f = province;
     kingdom.push_back(new kingdomCard(f, 12));
     f = woodcutter;
-    kingdom.push_back(new kingdomCard(f, 1));
+    kingdom.push_back(new kingdomCard(f));
     f = village;
-    kingdom.push_back(new kingdomCard(f, 1));
+    kingdom.push_back(new kingdomCard(f));
     f = smithy;
     kingdom.push_back(new kingdomCard(f));
     f = festival;
