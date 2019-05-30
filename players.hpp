@@ -13,8 +13,6 @@ void playerInit(int playerCount) {
         for(int j = 0; j < 3; j++) {
             p->addCardDeck(estate(p));
         }
-        p->shuffleDeck();
-        p->draw(5);
     }
 }
 

@@ -10,7 +10,7 @@
 #include "players.hpp"
 #include "loop.hpp"
 
-int main() {
-    start(3);
+int main(int argc, char *argv[]) {
+    start(1);
     return 0;
 }

@@ -6,10 +6,14 @@
 #include <algorithm>
 
 enum type {TREASURE, VICTORY, ACTION};
-int turn = 0;
+unsigned int turn = 0;
+unsigned int totalTurns = 0;
 class kingdomCard;
 class card;
 std::vector< kingdomCard * > kingdom;
+std::vector< card * > trash;
+void printKingdom();
+inline bool isInteger(const std::string & s);
 
 class player;
 
@@ -37,12 +41,14 @@ public:
         actionList[it](actionListValues[it], p);
         it++;
     }
-    void resetCard() { it = 0; }
+    void resetCard() { it = 0; }\
+
     int getCost() { return cost; }
     type getType() { return t; }
     int getValue() { return value; }
     int getPoints () { return points; }
     std::vector< void (*)(int, player *) > getActionList() { return actionList; }
+    player * getPlayer() { return p; }
 };
 
 int myrandom (int i) { return std::rand()%i;}
@@ -98,14 +104,30 @@ public:
     void playCard(int loc) {
         card *c = hand[loc];
         if(c->getType() == ACTION && actions > 0) {
+            board.push_back(c);
+            hand.erase(hand.begin() + loc);
             for(unsigned int i = 0; i < c->getActionList().size(); i++) {
                 c->doAction();
             }
-            board.push_back(c);
-            hand.erase(hand.begin() + loc);
             actions--;
         }
+        c->resetCard();
     }
+    // void trashCard(card *c) {
+    //     c->resetCard();
+    //     for(unsigned int i = 0; i < hand.size(); i++) {
+    //         if(board[i] == c) {
+    //             board.erase(board.begin() + i);
+    //             trash.push_back(c);
+    //         }
+    //     }
+    // }
+    void trashCard() {
+        card *c = board[board.size()];
+        board.pop_back();
+        trash.push_back(c);
+    }
+
     void clearBoard() {
         for(unsigned int i = 0; i < board.size(); i++) {
             card *c = board[board.size() - 1];
@@ -130,6 +152,18 @@ public:
             discard.push_back(c);
         }
     }
+    // void gainCard(int value) {
+    //     std::cout << "  GAIN CARD COSTING UP TO " << value << ": " << std::endl;
+    //     bool gained = false;
+    //     printKingdom();
+    //     while(!gained) {
+    //         std::string input;
+    //         std::getline(std::cin, input);
+    //         if(isInteger(input)) {
+    //             gained = kingdom[std::stoi(input)]->gain(this, value);
+    //         }
+    //     }
+    // }
     void clearAll() { clearBoard(); clearHand(); clearDeck(); }
 
     void updateGold(int change) { gold += change; }
@@ -172,6 +206,22 @@ public:
         } else {
             std::cout << "not enough money" << std::endl;
         }
+    }
+    bool gain(player *p, int value) {
+        card *c = cardCon(p);
+        if(c->getCost() <= value) {
+            if(remaining > 0) {
+                p->addCardDiscard(c);
+                p->updateGold(-c->getCost());
+                remaining--;
+                return true;
+            } else {
+                std::cout << "none remaining" << std::endl;
+            }
+        } else {
+            std::cout << "too expensive" << std::endl;
+        }
+        return false;
     }
     card *getCard() { return cardCon(playerList[turn]); }
     int getRemaining() { return remaining; }

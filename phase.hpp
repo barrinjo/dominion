@@ -27,9 +27,13 @@ inline bool isInteger(const std::string & s)
 }
 
 void actionPhase() {
+    player *p = playerList[turn];
+    if(totalTurns < playerList.size()) {
+        p->shuffleDeck();
+        p->draw(5);
+    }
     std::cout << "\033[2J\033[1;1H" << "  ACTION PHASE: " << std::endl;
     std::cout << "  PLAYER " << turn << std::endl;
-    player *p = playerList[turn];
     std::vector<card *> hand = p->getHand();
     bool exit = !handCheck(hand, ACTION);
     std::string input;

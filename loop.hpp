@@ -3,16 +3,16 @@
 
 #include "global.hpp"
 
-void gameLoop(int playerCount);
+void gameLoop(unsigned int playerCount);
 
-void start(int playerCount) {
+void start(unsigned int playerCount) {
     turn = 0;
     kingdomInit();
     playerInit(playerCount);
     gameLoop(playerCount);
 }
 
-void gameLoop(int playerCount) {
+void gameLoop(unsigned int playerCount) {
     bool exit = false;
     while(!exit) {
         actionPhase();
@@ -20,6 +20,7 @@ void gameLoop(int playerCount) {
         cleanPhase();
         exit = checkForGameEnd();
         turn++;
+        totalTurns++;
         if(turn >= playerCount)
             turn = 0;
     }

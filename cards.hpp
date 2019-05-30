@@ -36,6 +36,15 @@ card *woodcutter(player *p) {
     return c;
 }
 
+card *feast(player *p) {
+    card *c = new card("Feast", p, ACTION, 4, 0, 0);
+    void (*f)(int x, player *p) = trashCard;
+    c->addAction(f, 0);
+    f = gainCard;
+    c->addAction(f, 5);
+    return c;
+}
+
 card *village(player *p) {
     card *c = new card("Village", p, ACTION, 3, 0, 0);
     void (*f)(int x, player *p) = drawCards;

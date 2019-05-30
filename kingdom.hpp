@@ -64,6 +64,8 @@ void kingdomInit() {
     kingdom.push_back(new kingdomCard(f));
     f = village;
     kingdom.push_back(new kingdomCard(f));
+    f = feast;
+    kingdom.push_back(new kingdomCard(f));
     f = smithy;
     kingdom.push_back(new kingdomCard(f));
     f = festival;
